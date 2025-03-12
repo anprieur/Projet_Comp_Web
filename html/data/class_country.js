@@ -26,6 +26,12 @@ class Country {
         });
     }
 
+    get getPopDensity() { return this._population / (countries.find(c => c.alpha3Code === this._code)?.area || 1); }
+
+    get getBorders() { return this._voisins.map(code => Country.all_countries[code]); }
+
+    get getCurrencies() { return (countries.find(c => c.alpha3Code === this._code).currencies[0]["code"]).map(curr => Currency.all_currencies[code])}
+
 }
 
 Country.fill_countries();
