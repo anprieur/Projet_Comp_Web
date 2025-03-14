@@ -12,13 +12,15 @@ class Currency {
 
     static fill_curencies() {
         countries.forEach(country => {
-            const currencyData = country["currencies"][0];
-            if (currencyData) {
+            if (country["currencies"] && country["currencies"].length > 0) {
+                const currencyData = country["currencies"][0];
                 Currency.all_currencies[currencyData["code"]] = new Currency(
-                    currencyData["code"], 
-                    currencyData["name"], 
+                    currencyData["code"],
+                    currencyData["name"],
                     currencyData["symbol"]
                 );
+            } else {
+                console.log(`Le pays ${country["name"]} n'a pas de monnaie définie.`);
             }
         });
     }

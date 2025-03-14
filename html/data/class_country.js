@@ -30,10 +30,41 @@ class Country {
 
     get getBorders() { return this._voisins.map(code => Country.all_countries[code]); }
 
-    get getCurrencies() { return (countries.find(c => c.alpha3Code === this._code).currencies[0]["code"]).map(curr => Currency.all_currencies[code])}
+    get getCurrencies() {
+        const countryData = countries.find(c => c.alpha3Code === this._code);
+        
+        if (countryData && countryData.currencies && countryData.currencies.length > 0) {
+            const currencyCode = countryData.currencies[0]["code"];
+
+            return Currency.all_currencies[currencyCode];
+        } else {
+            console.warn(`Aucune devise trouvée pour le pays avec le code ${this._code}`);
+            return null;
+        }
+    }
+
+    get getLanguages() {
+        const countryData = countries.find(c => c.alpha3Code === this._code);
+        
+        if (countryData && countryData.languages && countryData.languages.length > 0) {
+            let L=[];
+            countryData.languages.forEach( language => {
+                L.push(Language.all_languages[language["iso639_2"]]);
+            });
+            
+            return L;
+        } else {
+            console.warn(`Aucune Langue trouvée pour le pays avec le code ${this._code}`);
+            return null;
+        }
+    }
 
 }
 
 Country.fill_countries();
 console.table(Country.all_countries);
 console.log(Country.all_countries["AFG"].toString());
+console.log(Country.all_countries["AFG"].getPopDensity);
+console.log(Country.all_countries["AFG"].getBorders);
+console.log(Country.all_countries["AFG"].getCurrencies);
+console.log(Country.all_countries["AFG"].getLanguages);
