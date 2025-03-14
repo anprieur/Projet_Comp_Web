@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Countries</title>
+    <link rel="stylesheet" href="test.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../data/countries.js" defer></script>
+    <script src="../data/class_country.js" defer></script>
+    <script src="../data/class_currency.js" defer></script>
+    <script src="../data/class_language.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>🌍 Pays du Monde</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="test.html">Tests</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="countries-list">
+            <h2>Liste des Pays</h2>
+            <input type="text" id="search" placeholder="Rechercher un pays...">
+            <div id="countries-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Projet Web Countries</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            Country.fill_countries();
+            const container = $("#countries-container");
+            
+            Object.values(Country.all_countries).forEach(country => {
+                const countryCard = `
+                    <div class="country-card">
+                        
+                        
+                        <h3>${country._nom}</h3>
+                        <p>Capitale: ${country._capital}</p>
+                        <p>Population: ${country._population.toLocaleString()} hab</p>
+                    </div>
+                `;
+                container.append(countryCard);
+            });
+        });
+    </script>
+</body>
+</html>

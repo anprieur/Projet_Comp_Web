@@ -3,38 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebApp Pays du Monde</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../data/class_language.js" defer></script>
+    <title>Tests - World Countries</title>
+    <link rel="stylesheet" href="test.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../data/countries.js" defer></script>
+    <script src="../data/class_country.js" defer></script>
     <script src="../data/class_currency.js" defer></script>
-    <script src="../data/class_country.js" defer></script> 
-    <script src="../data/test.js" defer></script> 
-    <script src="../data/countries.js" defer></script> 
+    <script src="../data/class_language.js" defer></script>
+    <script src="test.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Informations sur les Pays</h1>
+        <h1>🧪 Tests des Pays</h1>
         <nav>
-            <ul>
-                <li><a href="#" id="test1">Pays hors continent</a></li>
-                <li><a href="#" id="test2">Pays avec plus de voisins</a></li>
-                <li><a href="#" id="test3">Pays sans voisins</a></li>
-                <li><a href="#" id="test4">Pays avec plus de langues</a></li>
-                <li><a href="#" id="test5">Pays avec langue commune</a></li>
-                <li><a href="#" id="test6">Pays sans monnaie commune</a></li>
-                <li><a href="#" id="test7">Tri par densité</a></li>
-                <li><a href="#" id="test8">Pays avec plusieurs TLD</a></li>
-            </ul>
+            <a href="index.html">Accueil</a>
         </nav>
     </header>
+    
     <main>
-        <section id="result">
-            <h2>Résultats des tests</h2>
-            <div id="output"></div>
+        <section id="test-buttons">
+            <h2>Exécuter les Tests</h2>
+            <button onclick="outsideTheContinent()">Pays avec voisins hors continent</button>
+            <button onclick="moreNeighbors()">Pays avec le plus de voisins</button>
+            <button onclick="neighborless()">Pays sans voisins</button>
+            <button onclick="moreLanguages()">Pays parlant le plus de langues</button>
+            <button onclick="withCommonLanguage()">Pays partageant une langue avec un voisin</button>
+            <button onclick="withoutCommonCurrency()">Pays sans monnaie commune avec un voisin</button>
+            <button onclick="sortingDecreasingDensity()">Pays triés par densité décroissante</button>
+            <button onclick="moreTopLevelDomains()">Pays avec plusieurs TLDs</button>
+        </section>
+
+        <section id="test-results">
+            <h2>Résultats</h2>
+            <pre id="results"></pre>
         </section>
     </main>
+
     <footer>
-        <p>&copy; 2025 - WebApp Pays du Monde</p>
+        <p>&copy; 2025 - Projet Web Countries</p>
     </footer>
 </body>
 </html>
