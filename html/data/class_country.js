@@ -62,9 +62,9 @@ class Country {
 }
 
 Country.fill_countries();
-console.table(Country.all_countries);
-console.log(Country.all_countries["AFG"].toString());
-console.log(Country.all_countries["AFG"].getPopDensity);
-console.log(Country.all_countries["AFG"].getBorders);
-console.log(Country.all_countries["AFG"].getCurrencies);
-console.log(Country.all_countries["AFG"].getLanguages);
+// console.table(Country.all_countries);
+// console.log(Country.all_countries["AFG"].toString());
+// console.log(Country.all_countries["AFG"].getPopDensity);
+// console.log(Country.all_countries["AFG"].getBorders);
+// console.log(Country.all_countries["AFG"].getCurrencies);
+// console.log(Country.all_countries["AFG"].getLanguages);
