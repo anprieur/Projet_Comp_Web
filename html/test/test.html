@@ -1,18 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>WebApp Pays du Monde</title>
+    <link rel="stylesheet" href="../css/style.css">
     <script src="../data/class_language.js" defer></script>
     <script src="../data/class_currency.js" defer></script>
     <script src="../data/class_country.js" defer></script> 
     <script src="../data/test.js" defer></script> 
-    <script src="../data/countries.js"></script> 
+    <script src="../data/countries.js" defer></script> 
 </head>
 <body>
-    <script>
-        console.log(Country);
-    </script>
+    <header>
+        <h1>Informations sur les Pays</h1>
+        <nav>
+            <ul>
+                <li><a href="#" id="test1">Pays hors continent</a></li>
+                <li><a href="#" id="test2">Pays avec plus de voisins</a></li>
+                <li><a href="#" id="test3">Pays sans voisins</a></li>
+                <li><a href="#" id="test4">Pays avec plus de langues</a></li>
+                <li><a href="#" id="test5">Pays avec langue commune</a></li>
+                <li><a href="#" id="test6">Pays sans monnaie commune</a></li>
+                <li><a href="#" id="test7">Tri par densité</a></li>
+                <li><a href="#" id="test8">Pays avec plusieurs TLD</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="result">
+            <h2>Résultats des tests</h2>
+            <div id="output"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 - WebApp Pays du Monde</p>
+    </footer>
 </body>
 </html>
