@@ -28,5 +28,5 @@ class Currency {
 }
 
 Currency.fill_curencies();
-console.table(Currency.all_currencies);
-console.log(Currency.all_currencies["AFN"].toString());
+// console.table(Currency.all_currencies);
+// console.log(Currency.all_currencies["AFN"].toString());

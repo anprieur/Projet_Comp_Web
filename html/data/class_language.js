@@ -26,5 +26,5 @@ class Language {
 }
 
 Language.fill_languages();
-console.table(Language.all_languages);
-console.log(Language.all_languages["pus"].toString());
+// console.table(Language.all_languages);
+// console.log(Language.all_languages["pus"].toString());
