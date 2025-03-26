@@ -10,10 +10,7 @@
     <script src="../data/class_country.js" defer></script>
     <script src="../data/class_currency.js" defer></script>
     <script src="../data/class_language.js" defer></script>
-    <script src="../data/class_currency.js" defer></script>
-    <script src="../data/class_country.js" defer></script> 
-    <script src="../data/test.js" defer></script> 
-    <script src="../data/countries.js" defer></script> 
+    <script src="test.js" defer></script> 
 </head>
 <body>
     <header>
@@ -26,24 +23,45 @@
     <main>
         <section id="test-buttons">
             <h2>Exécuter les Tests</h2>
-            <button onclick="outsideTheContinent()">Pays avec voisins hors continent</button>
-            <button onclick="moreNeighbors()">Pays avec le plus de voisins</button>
-            <button onclick="neighborless()">Pays sans voisins</button>
-            <button onclick="moreLanguages()">Pays parlant le plus de langues</button>
-            <button onclick="withCommonLanguage()">Pays partageant une langue avec un voisin</button>
-            <button onclick="withoutCommonCurrency()">Pays sans monnaie commune avec un voisin</button>
-            <button onclick="sortingDecreasingDensity()">Pays triés par densité décroissante</button>
-            <button onclick="moreTopLevelDomains()">Pays avec plusieurs TLDs</button>
+            <button onclick="runTest(outsideTheContinent)">Pays avec voisins hors continent</button>
+            <button onclick="runTest(moreNeighbors)">Pays avec le plus de voisins</button>
+            <button onclick="runTest(neighborless)">Pays sans voisins</button>
+            <button onclick="runTest(moreLanguages)">Pays parlant le plus de langues</button>
+            <button onclick="runTest(withCommonLanguage)">Pays partageant une langue avec un voisin</button>
+            <button onclick="runTest(withoutCommonCurrency)">Pays sans monnaie commune avec un voisin</button>
+            <button onclick="runTest(sortingDecreasingDensity)">Pays triés par densité décroissante</button>
+            <button onclick="runTest(moreTopLevelDomains)">Pays avec plusieurs TLDs</button>
         </section>
 
         <section id="test-results">
             <h2>Résultats</h2>
-            <pre id="results"></pre>
+            <pre id="results">Cliquez sur un test pour voir les résultats ici.</pre>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2025 - Projet Web Countries</p>
     </footer>
+
+    <script>
+        function runTest(testFunction) {
+            const result = testFunction();
+            displayResults(result);
+        }
+
+        function displayResults(result) {
+            const resultsContainer = document.getElementById("results");
+            
+            if (Array.isArray(result)) {
+                resultsContainer.textContent = result.length > 0
+                    ? result.map(country => country._nom || country.name).join("\n")
+                    : "Aucun résultat trouvé.";
+            } else if (typeof result === "object" && result !== null) {
+                resultsContainer.textContent = JSON.stringify(result, null, 2);
+            } else {
+                resultsContainer.textContent = String(result);
+            }
+        }
+    </script>
 </body>
 </html>

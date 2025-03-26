@@ -101,3 +101,9 @@ function withCommonLanguage() {
 }
 
 console.log(withCommonLanguage());
+
+window.outsideTheContinent = outsideTheContinent;
+window.moreNeighbors = moreNeighbors;
+window.neighborless = neighborless;
+window.moreLanguages = moreLanguages;
+window.withCommonLanguage = withCommonLanguage;
