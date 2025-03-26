@@ -2,9 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("countries-table");
     const prevButton = document.getElementById("prev");
     const nextButton = document.getElementById("next");
-    const pageNumber = document.getElementById("page-number");
+    const pageNumber = document.getElementById("current-page");
     let currentPage = 1;
     const countriesPerPage = 25;
+    let openedDetailsIndex = null; // Track the index of the country whose details are opened
 
     function renderTable(page) {
         tableBody.innerHTML = ''; // Clear the table before rendering
@@ -36,13 +37,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Click event to show country details
             row.addEventListener("click", function () {
-                showCountryDetails(startIndex + index, row);
+                const countryIndex = startIndex + index;
+                if (openedDetailsIndex === countryIndex) {
+                    // If the clicked country is already open, close it
+                    closeCountryDetails(countryIndex);
+                } else {
+                    // Otherwise, show details for the clicked country
+                    showCountryDetails(countryIndex, row);
+                }
             });
 
             tableBody.appendChild(row);
         });
 
-        pageNumber.textContent = `Page ${page}`;
+        pageNumber.textContent = page;
 
         // Enable or disable the pagination buttons based on the page
         prevButton.disabled = page === 1;
@@ -73,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p><strong>Continent :</strong> ${continent}</p>
                     <p><strong>Drapeau :</strong></p>
                     <img src="${flagUrl}" alt="Drapeau de ${name}" width="100">
-                    <button class="close-details">Fermer</button>
                 </div>
             </td>
         `;
@@ -81,10 +88,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Insert the details row after the clicked row
         row.insertAdjacentElement("afterend", detailsRow);
 
-        // Close details when button clicked
-        detailsRow.querySelector(".close-details").addEventListener("click", function () {
+        openedDetailsIndex = index; // Track the country index whose details are open
+    }
+
+    // Function to close country details
+    function closeCountryDetails(index) {
+        const detailsRow = document.querySelector(`tr.country-details[data-index="${index}"]`);
+        if (detailsRow) {
             detailsRow.remove(); // Remove the details row when closing
-        });
+        }
+        openedDetailsIndex = null; // Reset the opened details index
     }
 
     // Handle pagination buttons
