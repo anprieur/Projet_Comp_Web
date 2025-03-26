@@ -107,3 +107,6 @@ window.moreNeighbors = moreNeighbors;
 window.neighborless = neighborless;
 window.moreLanguages = moreLanguages;
 window.withCommonLanguage = withCommonLanguage;
+window.withoutCommonCurrency = withoutCommonCurrency;
+window.sortingDecreasingDensity = sortingDecreasingDensity;
+window.moreTopLevelDomains = moreTopLevelDomains;
