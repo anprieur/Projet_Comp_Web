@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Pays - Version 3</title>
+    <title>Liste des Pays V3</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script_v3.js" defer></script>
@@ -15,32 +15,41 @@
 
     <p>Page <span id="current-page">1</span></p>
 
-        <section id="countries-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Population</th>
-                        <th>Surface</th>
-                        <th>Densité</th>
-                        <th>Continent</th>
-                        <th>Drapeau</th>
-                    </tr>
-                </thead>
-                <tbody id="countries-table">
+    <!-- Zone de détail -->
+    <div id="country-detail" class="modal hidden">
+        <button id="close-detail">X</button>
+        <h2 id="detail-name"></h2>
+        <p><strong>Population :</strong> <span id="detail-population"></span></p>
+        <p><strong>Surface :</strong> <span id="detail-area"></span> km²</p>
+        <p><strong>Densité :</strong> <span id="detail-density"></span> hab/km²</p>
+        <p><strong>Continent :</strong> <span id="detail-continent"></span></p>
+    </div>
 
-                </tbody>
-            </table>
+    <!-- Affichage du drapeau en grand -->
+    <div id="flag-overlay" class="hidden">
+        <button id="close-flag">X</button>
+        <img id="flag-large" src="" alt="Drapeau">
+    </div>
 
-            <div id="pagination">
-                <button id="prev" disabled>&lt; Préc</button>
-                <button id="next">Suiv &gt;</button>
-            </div>
-        </section>
-    </main>
 
-    <footer>
-        <p>&copy; 2025 - Projet Web Countries</p>
-    </footer>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom en Français</th>
+                <th>Population</th>
+                <th>Surface (km²)</th>
+                <th>Densité (hab/km²)</th>
+                <th>Continent</th>
+                <th>Drapeau</th>
+            </tr>
+        </thead>
+        <tbody id="countries-table"></tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prev">&lt; Préc</button>
+        <button id="next">Suiv &gt;</button>
+    </div>
+
 </body>
 </html>

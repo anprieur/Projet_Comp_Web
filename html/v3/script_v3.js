@@ -1,21 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("countries-table");
-    const prevButton = document.getElementById("prev");
-    const nextButton = document.getElementById("next");
-    const pageNumber = document.getElementById("current-page");
+    const currentPageSpan = document.getElementById("current-page");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    
+    const detailModal = document.getElementById("country-detail");
+    const closeDetailBtn = document.getElementById("close-detail");
+    
+    const flagOverlay = document.getElementById("flag-overlay");
+    const flagLarge = document.getElementById("flag-large");
+    const closeFlagBtn = document.getElementById("close-flag");
+
+    const itemsPerPage = 25;
     let currentPage = 1;
-    const countriesPerPage = 25;
-    let openedDetailsIndex = null; // Track the index of the country whose details are opened
+    const totalPages = Math.ceil(countries.length / itemsPerPage);
 
-    function renderTable(page) {
-        tableBody.innerHTML = ''; // Clear the table before rendering
+    function renderTable() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedCountries = countries.slice(startIndex, endIndex);
 
-        // Slice the countries array to show only the countries for the current page
-        const startIndex = (page - 1) * countriesPerPage;
-        const endIndex = page * countriesPerPage;
-        const countriesToDisplay = countries.slice(startIndex, endIndex);
-
-        countriesToDisplay.forEach((country, index) => {
+        const rows = paginatedCountries.map(country => {
             const name = country.translations?.fr || country.name;
             const population = country.population.toLocaleString();
             const area = country.area ? country.area.toLocaleString() : "N/A";
@@ -23,98 +28,73 @@ document.addEventListener("DOMContentLoaded", function () {
             const continent = country.region || "N/A";
             const flagUrl = country.flags?.png || country.flag;
 
-            const row = document.createElement("tr");
-            row.setAttribute("data-index", startIndex + index); // Add an index attribute to identify the country clicked
-
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${population}</td>
-                <td>${area}</td>
-                <td>${density}</td>
-                <td>${continent}</td>
-                <td><img src="${flagUrl}" alt="Drapeau de ${name}" width="50" class="flag-img"></td>
+            return `
+                <tr data-name="${name}" data-population="${population}" 
+                    data-area="${area}" data-density="${density}" data-continent="${continent}">
+                    <td>${name}</td>
+                    <td>${population}</td>
+                    <td>${area}</td>
+                    <td>${density}</td>
+                    <td>${continent}</td>
+                    <td><img src="${flagUrl}" alt="Drapeau de ${name}" width="50" class="flag-img"></td>
+                </tr>
             `;
+        }).join("");
 
-            // Click event to show country details
-            row.addEventListener("click", function () {
-                const countryIndex = startIndex + index;
-                if (openedDetailsIndex === countryIndex) {
-                    // If the clicked country is already open, close it
-                    closeCountryDetails(countryIndex);
-                } else {
-                    // Otherwise, show details for the clicked country
-                    showCountryDetails(countryIndex, row);
-                }
-            });
+        tableBody.innerHTML = rows;
+        currentPageSpan.textContent = currentPage;
 
-            tableBody.appendChild(row);
-        });
-
-        pageNumber.textContent = page;
-
-        // Enable or disable the pagination buttons based on the page
-        prevButton.disabled = page === 1;
-        nextButton.disabled = page === Math.ceil(countries.length / countriesPerPage);
+        prevBtn.style.display = currentPage === 1 ? "none" : "inline-block";
+        nextBtn.style.display = currentPage === totalPages ? "none" : "inline-block";
     }
 
-    // Function to show country details
-    function showCountryDetails(index, row) {
-        const country = countries[index];
-        const name = country.translations?.fr || country.name;
-        const population = country.population.toLocaleString();
-        const area = country.area ? country.area.toLocaleString() : "N/A";
-        const density = country.area ? (country.population / country.area).toFixed(2) : "N/A";
-        const continent = country.region || "N/A";
-        const flagUrl = country.flags?.png || country.flag;
-
-        const detailsRow = document.createElement("tr");
-        detailsRow.setAttribute("class", "country-details");
-
-        detailsRow.innerHTML = `
-            <td colspan="6" class="country-details-cell">
-                <div>
-                    <h3>Details du pays : ${name}</h3>
-                    <p><strong>Nom en français :</strong> ${name}</p>
-                    <p><strong>Population :</strong> ${population}</p>
-                    <p><strong>Surface :</strong> ${area} km²</p>
-                    <p><strong>Densité de population :</strong> ${density} hab/km²</p>
-                    <p><strong>Continent :</strong> ${continent}</p>
-                    <p><strong>Drapeau :</strong></p>
-                    <img src="${flagUrl}" alt="Drapeau de ${name}" width="100">
-                </div>
-            </td>
-        `;
-
-        // Insert the details row after the clicked row
-        row.insertAdjacentElement("afterend", detailsRow);
-
-        openedDetailsIndex = index; // Track the country index whose details are open
-    }
-
-    // Function to close country details
-    function closeCountryDetails(index) {
-        const detailsRow = document.querySelector(`tr.country-details[data-index="${index}"]`);
-        if (detailsRow) {
-            detailsRow.remove(); // Remove the details row when closing
-        }
-        openedDetailsIndex = null; // Reset the opened details index
-    }
-
-    // Handle pagination buttons
-    prevButton.addEventListener("click", function () {
+    prevBtn.addEventListener("click", () => {
         if (currentPage > 1) {
             currentPage--;
-            renderTable(currentPage);
+            renderTable();
         }
     });
 
-    nextButton.addEventListener("click", function () {
-        if (currentPage < Math.ceil(countries.length / countriesPerPage)) {
+    nextBtn.addEventListener("click", () => {
+        if (currentPage < totalPages) {
             currentPage++;
-            renderTable(currentPage);
+            renderTable();
         }
     });
 
-    // Initial render
-    renderTable(currentPage);
+    // Gestion du clic sur un pays pour afficher les détails
+    tableBody.addEventListener("click", (event) => {
+        const row = event.target.closest("tr");
+        if (!row) return;
+
+        if (!event.target.classList.contains("flag-img")) {
+            document.getElementById("detail-name").textContent = row.dataset.name;
+            document.getElementById("detail-population").textContent = row.dataset.population;
+            document.getElementById("detail-area").textContent = row.dataset.area;
+            document.getElementById("detail-density").textContent = row.dataset.density;
+            document.getElementById("detail-continent").textContent = row.dataset.continent;
+            
+            detailModal.classList.remove("hidden");
+        }
+    });
+
+    // Fermeture de la zone de détail
+    closeDetailBtn.addEventListener("click", () => {
+        detailModal.classList.add("hidden");
+    });
+
+    // Gestion du clic sur un drapeau pour l'afficher en grand
+    tableBody.addEventListener("click", (event) => {
+        if (event.target.classList.contains("flag-img")) {
+            flagLarge.src = event.target.src;
+            flagOverlay.classList.remove("hidden");
+        }
+    });
+
+    // Fermeture de l'affichage du drapeau
+    closeFlagBtn.addEventListener("click", () => {
+        flagOverlay.classList.add("hidden");
+    });
+
+    renderTable();
 });
