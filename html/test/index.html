@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-        <h1>🌍 Pays du Monde</h1>
+        <h1>Pays du Monde</h1>
         <nav>
             <a href="index.html">Accueil</a>
             <a href="test.html">Tests</a>
@@ -24,7 +24,7 @@
     <main>
         <section id="countries-list">
             <h2>Liste des Pays</h2>
-            <input type="text" id="search" placeholder="Rechercher un pays...">
+            <input type="text" id="search" placeholder="🔍 Rechercher un pays...">
             <div id="countries-container"></div>
         </section>
     </main>
@@ -37,18 +37,33 @@
         $(document).ready(function() {
             Country.fill_countries();
             const container = $("#countries-container");
-            
-            Object.values(Country.all_countries).forEach(country => {
-                const countryCard = `
-                    <div class="country-card">
-                        
-                        
-                        <h3>${country._nom}</h3>
-                        <p>Capitale: ${country._capital}</p>
-                        <p>Population: ${country._population.toLocaleString()} hab</p>
-                    </div>
-                `;
-                container.append(countryCard);
+            const searchInput = $("#search");
+
+            function displayCountries(filter = "") {
+                container.empty();
+                Object.values(Country.all_countries).forEach(country => {
+                    const countryData = countries.find(c => c.alpha3Code === country._code);
+                    
+                    if (countryData && countryData.name.toLowerCase().includes(filter.toLowerCase())) {
+                        const flagUrl = countryData.flags?.png || countryData.flag || "https://via.placeholder.com/320x200?text=No+Flag";
+
+                        const countryCard = `
+                            <div class="country-card">
+                                <img src="${flagUrl}" alt="Drapeau de ${countryData.name}">
+                                <h3>${countryData.name}</h3>
+                                <p>Capitale: ${countryData.capital}</p>
+                                <p>Population: ${countryData.population.toLocaleString()} hab</p>
+                            </div>
+                        `;
+                        container.append(countryCard);
+                    }
+                });
+            }
+
+            displayCountries();
+
+            searchInput.on("input", function() {
+                displayCountries(this.value);
             });
         });
     </script>
