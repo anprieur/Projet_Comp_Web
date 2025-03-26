@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Générer les lignes avec map()
     const rows = countries.map(country => {
-        const name = country.translations?.fr || country.name;
+        const name = country["translations"]["fr"];
         const population = country.population.toLocaleString();
         const area = country.area ? country.area.toLocaleString() : "N/A";
         const density = country.area ? (country.population / country.area).toFixed(2) : "N/A";
