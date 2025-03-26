@@ -17,7 +17,7 @@ function outsideTheContinent() {
     return result;
 }
 
-console.log(outsideTheContinent());
+// console.log(outsideTheContinent());
 
 
 function moreNeighbors() {
@@ -33,7 +33,7 @@ function moreNeighbors() {
     return result;
 }
 
-console.log(moreNeighbors());
+// console.log(moreNeighbors());
 
 
 function neighborless() {
@@ -48,7 +48,7 @@ function neighborless() {
     return result;
 }
 
-console.log(neighborless());
+// console.log(neighborless());
 
 
 function moreLanguages() {
@@ -72,7 +72,7 @@ function moreLanguages() {
     return result;
 }
 
-console.log(moreLanguages());
+// console.log(moreLanguages());
 
 
 function withCommonLanguage() {
