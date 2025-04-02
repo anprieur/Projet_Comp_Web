@@ -160,18 +160,15 @@ document.addEventListener("DOMContentLoaded", function () {
         countryItems.forEach(country => {
             const dataAttr = country.getAttribute("data-country");
 
-            try {
-                const countryData = JSON.parse(dataAttr);
-                const countryName = countryData.translations?.fr.toLowerCase() || countryData.name.toLowerCase() ;
-    
-                if (countryName.includes(query)) {
-                    country.style.removeProperty('display');
-                } else {
-                    country.style.display = "none";
-                }
-            } catch (error) {
-                console.error("Erreur de parsing JSON :", error, "Valeur de data-country :", dataAttr);
+            const countryData = JSON.parse(dataAttr);
+            const countryName = countryData.translations?.fr.toLowerCase() || countryData.name.toLowerCase() ;
+
+            if (countryName.includes(query)) {
+                country.style.removeProperty('display');
+            } else {
+                country.style.display = "none";
             }
+            
         });
     });
     
