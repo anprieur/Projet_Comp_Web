@@ -150,6 +150,16 @@ img {
     flex-direction: row-reverse;
 }
 
+.popup-content p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.popup-content strong {
+    color: #333;
+}
+
+
 /* Popup de drapeau */
 #flag-popup {
     display: none;
@@ -164,12 +174,16 @@ img {
     z-index: 1000;
 }
 
-.large-flag {
+#popup-flag-img {
     max-width: 90%;
     max-height: 80vh;
     display: block;
     margin: auto;
-    width: auto;
+    width: 300px;
+}
+
+.country-flag{
+    cursor: pointer;
 }
 
 

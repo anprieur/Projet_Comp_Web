@@ -33,25 +33,28 @@
         <button id="next-btn">Suivant &gt;</button>
     </div>
 
-    <!-- Popup pour les détails du pays -->
+    <!-- Popup pour les détails d'un pays -->
     <div id="country-popup" class="popup">
         <div class="popup-content">
             <span class="close-btn">&times;</span>
             <h2 id="popup-title"></h2>
-            <p><strong>Population:</strong> <span id="popup-population"></span></p>
-            <p><strong>Surface:</strong> <span id="popup-area"></span></p>
-            <p><strong>Densité:</strong> <span id="popup-density"></span></p>
-            <p><strong>Continent:</strong> <span id="popup-continent"></span></p>
+            <p><strong>Nom natif :</strong> <span id="popup-nativeName"></span></p>
+            <p><strong>Capitale :</strong> <span id="popup-capital"></span></p>
+            <p><strong>Fuseaux horaires :</strong> <span id="popup-timezones"></span></p>
+            <p><strong>Code d'appel :</strong> <span id="popup-callingCodes"></span></p>
+            <p><strong>Devise :</strong> <span id="popup-currencies"></span></p>
+            <p><strong>Langues officielles :</strong> <span id="popup-languages"></span></p>
+            <p><strong>Pays frontaliers :</strong> <span id="popup-borders"></span></p>
         </div>
     </div>
 
+
     <!-- Popup pour afficher un drapeau en grand -->
     <div id="flag-popup" class="popup">
-        <div class="popup-content">
-            <span class="close-flag-btn">&times;</span>
-            <img id="flag-img" src="" alt="Drapeau" class="large-flag">
-        </div>
+        <span class="close-btn">&times;</span>
+        <img id="popup-flag-img" src="" alt="Drapeau en grand">
     </div>
+    
 
 </body>
 </html>
