@@ -3,34 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Pays V3</title>
+    <title>Liste des Pays - Détails</title>
     <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script_v3.js" defer></script>
     <script src="../data/countries.js" defer></script>
+    <script src="script_v3.js" defer></script>
 </head>
 <body>
 
     <h1>Liste des Pays V3</h1>
-
     <p>Page <span id="current-page">1</span></p>
-
-    <!-- Zone de détail -->
-    <div id="country-detail" class="modal hidden">
-        <button id="close-detail">X</button>
-        <h2 id="detail-name"></h2>
-        <p><strong>Population :</strong> <span id="detail-population"></span></p>
-        <p><strong>Surface :</strong> <span id="detail-area"></span> km²</p>
-        <p><strong>Densité :</strong> <span id="detail-density"></span> hab/km²</p>
-        <p><strong>Continent :</strong> <span id="detail-continent"></span></p>
-    </div>
-
-    <!-- Affichage du drapeau en grand -->
-    <div id="flag-overlay" class="hidden">
-        <button id="close-flag">X</button>
-        <img id="flag-large" src="" alt="Drapeau">
-    </div>
-
 
     <table>
         <thead>
@@ -47,8 +29,28 @@
     </table>
 
     <div class="pagination">
-        <button id="prev">&lt; Préc</button>
-        <button id="next">Suiv &gt;</button>
+        <button id="prev-btn">&lt; Précédent</button>
+        <button id="next-btn">Suivant &gt;</button>
+    </div>
+
+    <!-- Popup pour les détails du pays -->
+    <div id="country-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="popup-title"></h2>
+            <p><strong>Population:</strong> <span id="popup-population"></span></p>
+            <p><strong>Surface:</strong> <span id="popup-area"></span></p>
+            <p><strong>Densité:</strong> <span id="popup-density"></span></p>
+            <p><strong>Continent:</strong> <span id="popup-continent"></span></p>
+        </div>
+    </div>
+
+    <!-- Popup pour afficher un drapeau en grand -->
+    <div id="flag-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-flag-btn">&times;</span>
+            <img id="flag-img" src="" alt="Drapeau" class="large-flag">
+        </div>
     </div>
 
 </body>

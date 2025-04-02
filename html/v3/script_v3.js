@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("countries-table");
     const currentPageSpan = document.getElementById("current-page");
-    const prevBtn = document.getElementById("prev");
-    const nextBtn = document.getElementById("next");
-    
-    const detailModal = document.getElementById("country-detail");
-    const closeDetailBtn = document.getElementById("close-detail");
-    
-    const flagOverlay = document.getElementById("flag-overlay");
-    const flagLarge = document.getElementById("flag-large");
-    const closeFlagBtn = document.getElementById("close-flag");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    const popup = document.getElementById("country-popup");
+    const popupTitle = document.getElementById("popup-title");
+    const popupPopulation = document.getElementById("popup-population");
+    const popupArea = document.getElementById("popup-area");
+    const popupDensity = document.getElementById("popup-density");
+    const popupContinent = document.getElementById("popup-continent");
+    const closeBtn = document.querySelector(".close-btn");
+
+    const flagPopup = document.getElementById("flag-popup");
+    const flagImg = document.getElementById("flag-img");
+    const closeFlagBtn = document.querySelector(".close-flag-btn");
 
     const itemsPerPage = 25;
     let currentPage = 1;
@@ -20,23 +25,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const endIndex = startIndex + itemsPerPage;
         const paginatedCountries = countries.slice(startIndex, endIndex);
 
-        const rows = paginatedCountries.map(country => {
+        const rows = paginatedCountries.map((country, index) => {
             const name = country.translations?.fr || country.name;
             const population = country.population.toLocaleString();
             const area = country.area ? country.area.toLocaleString() : "N/A";
             const density = country.area ? (country.population / country.area).toFixed(2) : "N/A";
             const continent = country.region || "N/A";
-            const flagUrl = country.flags?.png || country.flag;
 
             return `
-                <tr data-name="${name}" data-population="${population}" 
-                    data-area="${area}" data-density="${density}" data-continent="${continent}">
+                <tr data-index="${startIndex + index}">
                     <td>${name}</td>
                     <td>${population}</td>
                     <td>${area}</td>
                     <td>${density}</td>
                     <td>${continent}</td>
-                    <td><img src="${flagUrl}" alt="Drapeau de ${name}" width="50" class="flag-img"></td>
+                    <td><img class="country-flag" src="${country.flags?.png}" alt="Drapeau de ${name}" width="50" data-flag="${country.flags?.png}"></td>
                 </tr>
             `;
         }).join("");
@@ -46,6 +49,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         prevBtn.style.display = currentPage === 1 ? "none" : "inline-block";
         nextBtn.style.display = currentPage === totalPages ? "none" : "inline-block";
+
+        document.querySelectorAll("#countries-table tr").forEach(row => {
+            row.addEventListener("click", function (event) {
+                if (!event.target.classList.contains("country-flag")) {
+                    const country = countries[this.getAttribute("data-index")];
+                    popupTitle.textContent = country.translations?.fr || country.name;
+                    popupPopulation.textContent = country.population.toLocaleString();
+                    popupArea.textContent = country.area ? country.area.toLocaleString() : "N/A";
+                    popupDensity.textContent = country.area ? (country.population / country.area).toFixed(2) : "N/A";
+                    popupContinent.textContent = country.region || "N/A";
+                    popup.style.display = "block";
+                }
+            });
+        });
+
+        document.querySelectorAll(".country-flag").forEach(flag => {
+            flag.addEventListener("click", function (event) {
+                event.stopPropagation(); // Empêche l'affichage des détails du pays
+                flagImg.src = this.dataset.flag;
+                flagPopup.style.display = "block";
+            });
+        });
     }
 
     prevBtn.addEventListener("click", () => {
@@ -62,38 +87,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Gestion du clic sur un pays pour afficher les détails
-    tableBody.addEventListener("click", (event) => {
-        const row = event.target.closest("tr");
-        if (!row) return;
-
-        if (!event.target.classList.contains("flag-img")) {
-            document.getElementById("detail-name").textContent = row.dataset.name;
-            document.getElementById("detail-population").textContent = row.dataset.population;
-            document.getElementById("detail-area").textContent = row.dataset.area;
-            document.getElementById("detail-density").textContent = row.dataset.density;
-            document.getElementById("detail-continent").textContent = row.dataset.continent;
-            
-            detailModal.classList.remove("hidden");
-        }
+    closeBtn.addEventListener("click", () => {
+        popup.style.display = "none";
     });
 
-    // Fermeture de la zone de détail
-    closeDetailBtn.addEventListener("click", () => {
-        detailModal.classList.add("hidden");
-    });
-
-    // Gestion du clic sur un drapeau pour l'afficher en grand
-    tableBody.addEventListener("click", (event) => {
-        if (event.target.classList.contains("flag-img")) {
-            flagLarge.src = event.target.src;
-            flagOverlay.classList.remove("hidden");
-        }
-    });
-
-    // Fermeture de l'affichage du drapeau
     closeFlagBtn.addEventListener("click", () => {
-        flagOverlay.classList.add("hidden");
+        flagPopup.style.display = "none";
     });
 
     renderTable();
