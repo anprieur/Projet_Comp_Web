@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const popupLanguages = document.getElementById("popup-languages");
     const popupBorders = document.getElementById("popup-borders");
 
+
     const itemsPerPage = 25;
     let currentPage = 1;
     const totalPages = Math.ceil(countries.length / itemsPerPage);
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const flagUrl = country.flags?.png || country.flag;
 
             return `
-                <tr data-index="${startIndex + index}">
+                <tr data-index="${startIndex + index}" class="countries" data-country='${JSON.stringify(country)}'>
                     <td class="country-row">${name}</td>
                     <td class="country-row">${population}</td>
                     <td class="country-row">${area}</td>
@@ -142,4 +143,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     renderTable();
+
+
+    // Input filtres
+    const searchInput = document.querySelector('.search-input');
+    const searchSelect = document.querySelectorAll('.search-select');
+    const countryItems = document.querySelectorAll('.countries');
+
+    ///////////////////////////////////////////////////
+    ///            Barre de recherche               ///
+    ///////////////////////////////////////////////////
+    // Barre de recherche
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+    
+        countryItems.forEach(country => {
+            const dataAttr = country.getAttribute("data-country");
+
+            try {
+                const countryData = JSON.parse(dataAttr);
+                const countryName = countryData.translations?.fr.toLowerCase() || countryData.name.toLowerCase() ;
+    
+                if (countryName.includes(query)) {
+                    country.style.removeProperty('display');
+                } else {
+                    country.style.display = "none";
+                }
+            } catch (error) {
+                console.error("Erreur de parsing JSON :", error, "Valeur de data-country :", dataAttr);
+            }
+        });
+    });
+    
 });
