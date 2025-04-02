@@ -26,14 +26,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Fonction pour afficher un popup avec blur
     function showPopup(popupElement) {
+        if (!popupElement) {
+            console.error("⚠️ L'élément popup est introuvable !");
+            return;
+        }
         popupElement.style.display = "block";
-        overlay.style.display = "block";
+        document.body.classList.add("blurred"); // Ajoute un blur si nécessaire
     }
-
-    // Fonction pour cacher un popup
+    
     function hidePopup(popupElement) {
+        if (!popupElement) {
+            console.error("⚠️ L'élément popup à fermer est introuvable !");
+            return;
+        }
         popupElement.style.display = "none";
-        overlay.style.display = "none";
+        document.body.classList.remove("blurred"); // Supprime le blur
     }
 
     // Gestion des boutons de fermeture
@@ -106,7 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
         popupCurrencies.textContent = country.currencies?.map(c => `${c.name} (${c.symbol})`).join(", ") || "N/A";
         popupLanguages.textContent = country.languages?.map(lang => `${lang.name} (${lang.nativeName})`).join(", ") || "N/A";
 
-        popupBorders.textContent = country.borders.length > 0 ? country.borders.join(", ") : "Aucune frontière terrestre";
+        const bordersList = country.borders && country.borders.length > 0 ? country.borders.join(", ") : "Aucune frontière";
+
 
         showPopup(countryPopup);
     }
