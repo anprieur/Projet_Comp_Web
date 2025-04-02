@@ -113,7 +113,10 @@ document.addEventListener("DOMContentLoaded", function () {
         popupCurrencies.textContent = country.currencies?.map(c => `${c.name} (${c.symbol})`).join(", ") || "N/A";
         popupLanguages.textContent = country.languages?.map(lang => `${lang.name} (${lang.nativeName})`).join(", ") || "N/A";
 
-        const bordersList = country.borders && country.borders.length > 0 ? country.borders.join(", ") : "Aucune frontière";
+        const bordersList = Array.isArray(country.borders) && country.borders.length 
+        ? country.borders.join(", ") 
+        : "Aucune frontière";
+
 
 
         showPopup(countryPopup);
