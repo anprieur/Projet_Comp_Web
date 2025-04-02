@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentPageSpan = document.getElementById("current-page");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
-    const overlay = document.getElementById("popup-overlay");
 
     // Popups
     const countryPopup = document.getElementById("country-popup");
@@ -24,14 +23,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
     const totalPages = Math.ceil(countries.length / itemsPerPage);
 
-    // Fonction pour afficher un popup avec blur
+    // Fonction pour afficher un popup
     function showPopup(popupElement) {
         if (!popupElement) {
             console.error("⚠️ L'élément popup est introuvable !");
             return;
         }
         popupElement.style.display = "block";
-        document.body.classList.add("blurred"); // Ajoute un blur si nécessaire
     }
     
     function hidePopup(popupElement) {
@@ -40,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         popupElement.style.display = "none";
-        document.body.classList.remove("blurred"); // Supprime le blur
     }
 
     // Gestion des boutons de fermeture
@@ -88,8 +85,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Clic sur un pays (sauf le drapeau)
         document.querySelectorAll(".country-row").forEach(cell => {
             cell.addEventListener("click", function () {
-                const rowIndex = this.parentNode.getAttribute("data-index");
-                showCountryPopup(countries[rowIndex]);
+                const rowIndex = this.closest("tr").getAttribute("data-index");
+                if (rowIndex !== null) {
+                    showCountryPopup(countries[rowIndex]);
+                }
             });
         });
 
@@ -98,13 +97,20 @@ document.addEventListener("DOMContentLoaded", function () {
             flag.addEventListener("click", function (event) {
                 event.stopPropagation(); // Empêche l'ouverture de la popup du pays
                 const countryIndex = this.getAttribute("data-index");
-                showFlagPopup(countries[countryIndex]);
+                if (countryIndex !== null) {
+                    showFlagPopup(countries[countryIndex]);
+                }
             });
         });
     }
 
     // Affiche la popup des détails du pays
     function showCountryPopup(country) {
+        if (!country) {
+            console.error("❌ Erreur : Aucune donnée de pays reçue !");
+            return;
+        }
+
         popupTitle.textContent = country.translations?.fr || country.name;
         popupNativeName.textContent = country.nativeName || "N/A";
         popupCapital.textContent = country.capital || "N/A";
@@ -113,17 +119,19 @@ document.addEventListener("DOMContentLoaded", function () {
         popupCurrencies.textContent = country.currencies?.map(c => `${c.name} (${c.symbol})`).join(", ") || "N/A";
         popupLanguages.textContent = country.languages?.map(lang => `${lang.name} (${lang.nativeName})`).join(", ") || "N/A";
 
-        const bordersList = Array.isArray(country.borders) && country.borders.length 
-        ? country.borders.join(", ") 
-        : "Aucune frontière";
+        const bordersList = country.borders?.map(borderCode => {
+            const borderCountry = countries.find(c => c.alpha3Code === borderCode);
+            return borderCountry ? borderCountry.translations?.fr || borderCountry.name : borderCode;
+        }).join(", ") || "Aucune frontière";
 
-
+        popupBorders.textContent = `${bordersList}`;
 
         showPopup(countryPopup);
     }
 
     // Affiche le drapeau en grand
     function showFlagPopup(country) {
+        if (!country) return;
         flagImage.src = country.flags.svg || country.flags.png;
         flagImage.alt = `Drapeau de ${country.translations?.fr || country.name}`;
         showPopup(flagPopup);
