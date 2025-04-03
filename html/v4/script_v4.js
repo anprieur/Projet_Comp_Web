@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const itemsPerPage = 25;
     let currentPage = 1;
-    const totalPages = Math.ceil(countries.length / itemsPerPage);
+    let filteredCountries = [...countries];
 
     // Fonction pour afficher un popup avec blur
     function showPopup(popupElement) {
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderTable() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        const paginatedCountries = countries.slice(startIndex, endIndex);
+        const paginatedCountries = filteredCountries.slice(startIndex, endIndex);
 
         tableBody.innerHTML = paginatedCountries.map((country, index) => {
             const name = country.translations?.fr || country.name;
@@ -84,8 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         currentPageSpan.textContent = currentPage;
         prevBtn.style.display = currentPage === 1 ? "none" : "inline-block";
-        nextBtn.style.display = currentPage === totalPages ? "none" : "inline-block";
 
+        const totalFilteredPages = Math.ceil(filteredCountries.length / itemsPerPage);
+        nextBtn.style.display = currentPage >= totalFilteredPages || totalFilteredPages === 0 ? "none" : "inline-block";
     }
 
     // Ajoute les événements après chaque rendu du tableau
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     nextBtn.addEventListener("click", () => {
-        if (currentPage < totalPages) {
+        if (currentPage < Math.ceil(filteredCountries.length / itemsPerPage)) {
             currentPage++;
             renderTable();
         }
@@ -159,16 +160,12 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase().trim();
     
-        countryItems.forEach(country => {
-            const countryName = country.getAttribute("data-name").toLowerCase();
-
-            if (countryName.includes(query)) {
-                country.style.removeProperty('display');
-            } else {
-                country.style.display = "none";
-            }
-            
+        filteredCountries = countries.filter(country => {
+            return (country.translations?.fr || country.name).toLowerCase().includes(query);
         });
+
+        currentPage = 1;
+        renderTable();
 
     });
 
