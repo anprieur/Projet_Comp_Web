@@ -66,7 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const flagUrl = country.flags?.png || country.flag;
 
             return `
-                <tr data-index="${startIndex + index}" class="countries" data-country='${JSON.stringify(country)}'>
+                <tr class="countries" 
+                    data-index="${startIndex + index}" 
+                    data-name='${name}'
+                    data-languages='${JSON.stringify(country.languages.map(lang => lang.name))}'
+                    data-continent='${continent}'
+                >
                     <td class="country-row">${name}</td>
                     <td class="country-row">${population}</td>
                     <td class="country-row">${area}</td>
@@ -81,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
         prevBtn.style.display = currentPage === 1 ? "none" : "inline-block";
         nextBtn.style.display = currentPage === totalPages ? "none" : "inline-block";
 
-        addEventListeners();
     }
 
     // Ajoute les événements après chaque rendu du tableau
@@ -142,8 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    renderTable();
-
 
     // Input filtres
     const searchInput = document.querySelector('.search-input');
@@ -158,10 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const query = searchInput.value.toLowerCase().trim();
     
         countryItems.forEach(country => {
-            const dataAttr = country.getAttribute("data-country");
-
-            const countryData = JSON.parse(dataAttr);
-            const countryName = countryData.translations?.fr.toLowerCase() || countryData.name.toLowerCase() ;
+            const countryName = country.getAttribute("data-name").toLowerCase();
 
             if (countryName.includes(query)) {
                 country.style.removeProperty('display');
@@ -170,6 +169,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             
         });
+
     });
+
+    renderTable();
     
 });
