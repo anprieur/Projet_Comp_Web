@@ -232,7 +232,74 @@ document.addEventListener("DOMContentLoaded", function () {
     ///                   V4                        ///
     ///////////////////////////////////////////////////
 
+    let sortConfig = {
+        column: null,
+        direction: 'none'
+      };
+      
+
+    const columnMap = {
+    name: country => country.translations?.fr || country.name,
+    population: country => country.population,
+    area: country => country.area,
+    density: country => country.area ? (country.population / country.area) : 0,
+    region: country => country.region
+    };
+
+    function updateSortIndicators() {
+        document.querySelectorAll('th[data-column]').forEach(header => {
+            const col = header.getAttribute('data-column');
+            let indicator = '';
+        
+            if (col === sortConfig.column) {
+                if (sortConfig.direction === 'asc') indicator = ' ↑';
+                else if (sortConfig.direction === 'desc') indicator = ' ↓';
+            }
+            
+            const baseText = header.textContent.replace(/[\s↑↓]+$/, '');
+            header.textContent = baseText + indicator;
+        });
+    }
     
+    document.querySelectorAll('th[data-column]').forEach(header => {
+        header.addEventListener('click', () => {
+            const clickedColumn = header.getAttribute('data-column');
+        
+            if (sortConfig.column === clickedColumn) {
+                sortConfig.direction = sortConfig.direction === 'none' ? 'asc'
+                                        : sortConfig.direction === 'asc' ? 'desc'
+                                        : 'none';
+            } else {
+                sortConfig.column = clickedColumn;
+                sortConfig.direction = 'asc';
+            }
+        
+            if (sortConfig.direction === 'none') {
+                applyFilters();
+            } else {
+                const accessor = columnMap[sortConfig.column];
+                filteredCountries.sort((a, b) => {
+                    const aVal = accessor(a);
+                    const bVal = accessor(b);
+            
+                    if (typeof aVal === 'string') {
+                        return sortConfig.direction === 'asc'
+                            ? aVal.localeCompare(bVal)
+                            : bVal.localeCompare(aVal);
+                    } else {
+                        return sortConfig.direction === 'asc'
+                            ? aVal - bVal
+                            : bVal - aVal;
+                    }
+                });
+            }
+        
+            updateSortIndicators();
+            currentPage = 1;
+            renderTable();
+        });
+    });
+
 
     renderTable();
     

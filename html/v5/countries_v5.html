@@ -10,7 +10,7 @@
     <script src="../data/class_country.js" defer></script>
     <script src="../data/class_language.js" defer></script>
     <script src="../data/class_currency.js" defer></script>
-    <script src="script_v4.js" defer></script>
+    <script src="script_v5.js" defer></script>
 </head>
 <body>
 
@@ -46,16 +46,17 @@
     <table>
         <thead>
             <tr>
-                <th>Nom en Français</th>
-                <th>Population</th>
-                <th>Surface (km²)</th>
-                <th>Densité (hab/km²)</th>
-                <th>Continent</th>
+                <th data-column="name">Nom en Français</th>
+                <th data-column="population">Population</th>
+                <th data-column="area">Surface</th>
+                <th data-column="density">Densité</th>
+                <th data-column="region">Continent</th>
                 <th>Drapeau</th>
             </tr>
         </thead>
         <tbody id="countries-table"></tbody>
     </table>
+    
 
     <div class="pagination">
         <button id="prev-btn">&lt; Précédent</button>
