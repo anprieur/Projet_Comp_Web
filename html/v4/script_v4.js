@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    ///////////////////////////////////////////////////
+    ///                 Constante                   ///
+    ///////////////////////////////////////////////////
+
     const tableBody = document.getElementById("countries-table");
     const currentPageSpan = document.getElementById("current-page");
     const prevBtn = document.getElementById("prev-btn");
@@ -24,6 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const itemsPerPage = 25;
     let currentPage = 1;
     let filteredCountries = [...countries];
+
+
+
+    ///////////////////////////////////////////////////
+    ///                   V1                        ///
+    ///////////////////////////////////////////////////
 
     // Fonction pour afficher un popup avec blur
     function showPopup(popupElement) {
@@ -89,6 +100,33 @@ document.addEventListener("DOMContentLoaded", function () {
         nextBtn.style.display = currentPage >= totalFilteredPages || totalFilteredPages === 0 ? "none" : "inline-block";
     }
 
+
+
+    ///////////////////////////////////////////////////
+    ///                   V2                        ///
+    ///////////////////////////////////////////////////
+
+    // Navigation entre les pages
+    prevBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
+
+    nextBtn.addEventListener("click", () => {
+        if (currentPage < Math.ceil(filteredCountries.length / itemsPerPage)) {
+            currentPage++;
+            renderTable();
+        }
+    });
+
+
+
+    ///////////////////////////////////////////////////
+    ///                   V3                        ///
+    ///////////////////////////////////////////////////
+
     // Ajoute les événements après chaque rendu du tableau
     function addEventListeners() {
         // Clic sur un pays (sauf le drapeau)
@@ -132,42 +170,61 @@ document.addEventListener("DOMContentLoaded", function () {
         showPopup(flagPopup);
     }
 
-    // Navigation entre les pages
-    prevBtn.addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable();
-        }
-    });
 
-    nextBtn.addEventListener("click", () => {
-        if (currentPage < Math.ceil(filteredCountries.length / itemsPerPage)) {
-            currentPage++;
-            renderTable();
-        }
-    });
 
+    ///////////////////////////////////////////////////
+    ///                   V4                        ///
+    ///////////////////////////////////////////////////
 
     // Input filtres
     const searchInput = document.querySelector('.search-input');
     const searchSelect = document.querySelectorAll('.search-select');
     const countryItems = document.querySelectorAll('.countries');
 
-    ///////////////////////////////////////////////////
-    ///            Barre de recherche               ///
-    ///////////////////////////////////////////////////
-    // Barre de recherche
-    searchInput.addEventListener('input', () => {
+    const searchOptions = document.querySelector('.search-options');
+    const selectElements = document.querySelectorAll('.search-select');
+    const continentSelect = selectElements[0];
+    const addedContinents = new Set();
+    const langueSelect = selectElements[1];
+
+    Object.values(Country.all_countries).forEach(country => {
+        if (!addedContinents.has(country._continent)) {
+            const option = document.createElement('option');
+            option.value = country._continent;
+            option.textContent = country._continent;
+            continentSelect.appendChild(option);
+
+            addedContinents.add(country._continent);
+        }
+    });
+
+    Object.values(Language.all_languages).forEach(langue => {
+        const option = document.createElement('option');
+        option.value = langue._nom;
+        option.textContent = langue._nom;
+        langueSelect.appendChild(option);
+    });
+
+
+    function applyFilters() {
         const query = searchInput.value.toLowerCase().trim();
+        const continent = continentSelect.value;
+        const langue = langueSelect.value;
     
         filteredCountries = countries.filter(country => {
-            return (country.translations?.fr || country.name).toLowerCase().includes(query);
+            const nameMatch = (country.translations?.fr || country.name).toLowerCase().includes(query);
+            const continentMatch = (continent === 'all' || continent === country.region);
+            const langueMatch = (langue === 'all' || (country.languages?.some(lang => lang.name === langue)));
+    
+            return nameMatch && continentMatch && langueMatch;
         });
-
+    
         currentPage = 1;
         renderTable();
-
-    });
+    }
+    
+    searchInput.addEventListener('input', applyFilters);
+    searchOptions.addEventListener('change', applyFilters);
 
     renderTable();
     
