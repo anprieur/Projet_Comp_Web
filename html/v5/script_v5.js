@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     ///////////////////////////////////////////////////
-    ///                   V4                        ///
+    ///                   V5                        ///
     ///////////////////////////////////////////////////
 
     let sortConfig = {
@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (sortConfig.direction === 'asc') indicator = ' ↑';
                 else if (sortConfig.direction === 'desc') indicator = ' ↓';
             }
-            
+
             const baseText = header.textContent.replace(/[\s↑↓]+$/, '');
             header.textContent = baseText + indicator;
         });
